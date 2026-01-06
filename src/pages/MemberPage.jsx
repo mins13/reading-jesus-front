@@ -34,7 +34,7 @@ export default function MemberPage() {
 
             // 숫자 검증(원하면 범위도 추가 가능)
             if (pagesValue !== null && (!Number.isFinite(pagesValue) || pagesValue < 0)) {
-                setMessage("장수는 0 이상의 숫자로 입력해줘 😅");
+                setMessage("장수는 0 이상의 숫자로 입력해주세요");
                 setLoading(false);
                 return;
             }
@@ -71,7 +71,7 @@ export default function MemberPage() {
                     <label className="label">이름</label>
                     <input
                         className="input"
-                        placeholder="예) 민영"
+                        placeholder="예) 진영찬"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         autoComplete="name"
