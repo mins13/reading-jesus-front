@@ -1,0 +1,114 @@
+.member-page {
+    min-height: 100vh;
+    padding: 16px;
+    box-sizing: border-box;
+    background: #ffffff;
+
+    /* 모바일에서 가운데 정렬 */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.member-card {
+    width: 100%;
+    max-width: 520px;
+    margin-top: 18px;
+    padding: 18px;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
+}
+
+.member-title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+}
+
+.member-sub {
+    margin: 8px 0 16px;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.field {
+    margin-top: 14px;
+    text-align: left;
+}
+
+.label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 800;
+    color: #111827;
+}
+
+/* ✅ 터치 영역 크게 + iOS 자동 확대 방지(16px 이상) */
+.input,
+.select {
+    width: 100%;
+    height: 54px;
+    padding: 0 14px;
+    border-radius: 14px;
+    border: 1px solid #d1d5db;
+    background: #fff;
+    font-size: 16px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.input:focus,
+.select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.btn {
+    width: 100%;
+    height: 58px;
+    margin-top: 18px;
+    border: none;
+    border-radius: 16px;
+    font-size: 18px;
+    font-weight: 900;
+    background: #2563eb;
+    color: #fff;
+    cursor: pointer;
+}
+
+.btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.msg {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    background: #f9fafb;
+    color: #111827;
+    font-size: 14px;
+    line-height: 1.35;
+}
+
+.footnote {
+    margin-top: 14px;
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+/* 조금 큰 폰에서는 카드 여백만 살짝 */
+@media (min-width: 480px) {
+    .member-page {
+        padding: 24px;
+    }
+    .member-card {
+        margin-top: 28px;
+        padding: 22px;
+    }
+}
