@@ -102,6 +102,14 @@
     color: #9ca3af;
 }
 
+.helper {
+    margin: 8px 0 0;
+    font-size: 12px;
+    color: #9ca3af;
+    line-height: 1.4;
+}
+
+
 /* 조금 큰 폰에서는 카드 여백만 살짝 */
 @media (min-width: 480px) {
     .member-page {
@@ -112,3 +120,5 @@
         padding: 22px;
     }
 }
+
+

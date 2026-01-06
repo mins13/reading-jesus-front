@@ -219,6 +219,7 @@ export default function AdminPage() {
                                 <th>날짜</th>
                                 <th>셀</th>
                                 <th>이름</th>
+                                <th>장수</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -227,11 +228,12 @@ export default function AdminPage() {
                                     <td>{it.readingDate}</td>
                                     <td className="admin-cell-strong">{it.cellName}</td>
                                     <td>{it.name}</td>
+                                    <td>{it.pages ?? "-"}</td>
                                 </tr>
                             ))}
                             {sortedItems.length === 0 && (
                                 <tr>
-                                    <td colSpan={3} className="admin-empty">
+                                    <td colSpan={4} className="admin-empty">
                                         조회 결과가 없습니다.
                                     </td>
                                 </tr>
