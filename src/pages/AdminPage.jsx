@@ -1,7 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import "./AdminPage.css";
+import {data} from "react-router-dom";
 
-const API_BASE = "http://localhost:8080";
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
+fetch(`${API_BASE}/api/reading/today`, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(data)
+});
 
 function parseCellNumber(cellName) {
     const n = parseInt(String(cellName || "").replace(/[^\d]/g, ""), 10);
