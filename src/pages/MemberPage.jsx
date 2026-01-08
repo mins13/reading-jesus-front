@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import "./MemberPage.css";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL; // .env에서 /api
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "/api";
 
 export default function MemberPage() {
     const [name, setName] = useState("");
@@ -29,7 +29,7 @@ export default function MemberPage() {
                 return;
             }
 
-            // ✅ API_BASE가 /api 이므로 뒤에는 /reading/...만 붙인다
+            // ✅ /api 중복 제거: API_BASE가 이미 /api 라고 가정
             const res = await fetch(`${API_BASE}/reading/today`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -42,6 +42,11 @@ export default function MemberPage() {
 
             const text = await res.text();
             setMessage(text);
+
+            // 원하면 성공 후 입력값 리셋
+            // setName("");
+            // setPages("");
+            // setCellName("1셀");
         } catch {
             setMessage("서버 연결 실패 😢");
         } finally {

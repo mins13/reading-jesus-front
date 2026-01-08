@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import "./AdminPage.css";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL; // .env에서 /api
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "/api";
 
 function parseCellNumber(cellName) {
     const n = parseInt(String(cellName || "").replace(/[^\d]/g, ""), 10);
@@ -41,7 +41,7 @@ export default function AdminPage() {
             if (baseDate) params.set("date", baseDate);
             if (cellName) params.set("cellName", cellName);
 
-            // ✅ /api 중복 제거: API_BASE가 이미 /api 이므로 뒤에는 /reading/... 만 붙인다
+            // ✅ /api 중복 제거: API_BASE가 이미 /api 라고 가정
             const res = await fetch(`${API_BASE}/reading/logs?${params.toString()}`);
             if (!res.ok) throw new Error(`조회 실패 (${res.status})`);
 
@@ -127,11 +127,7 @@ export default function AdminPage() {
                 <div className="admin-grid">
                     <div className="admin-field">
                         <label className="admin-label">기간</label>
-                        <select
-                            className="admin-select"
-                            value={period}
-                            onChange={(e) => setPeriod(e.target.value)}
-                        >
+                        <select className="admin-select" value={period} onChange={(e) => setPeriod(e.target.value)}>
                             <option value="DAY">하루</option>
                             <option value="WEEK">일주일</option>
                             <option value="MONTH">한달</option>
@@ -150,11 +146,7 @@ export default function AdminPage() {
 
                     <div className="admin-field">
                         <label className="admin-label">셀</label>
-                        <select
-                            className="admin-select"
-                            value={cellName}
-                            onChange={(e) => setCellName(e.target.value)}
-                        >
+                        <select className="admin-select" value={cellName} onChange={(e) => setCellName(e.target.value)}>
                             <option value="">전체</option>
                             <option value="1셀">1셀</option>
                             <option value="2셀">2셀</option>
@@ -164,11 +156,7 @@ export default function AdminPage() {
 
                     <div className="admin-field">
                         <label className="admin-label">정렬</label>
-                        <select
-                            className="admin-select"
-                            value={sortMode}
-                            onChange={(e) => setSortMode(e.target.value)}
-                        >
+                        <select className="admin-select" value={sortMode} onChange={(e) => setSortMode(e.target.value)}>
                             <option value="CELL_NAME_DATE">셀 → 이름 → 날짜</option>
                             <option value="NAME_GROUP">이름 기준 묶기</option>
                         </select>
@@ -176,11 +164,7 @@ export default function AdminPage() {
                 </div>
 
                 <div className="admin-btns">
-                    <button
-                        className="admin-btn admin-btn-primary"
-                        onClick={fetchLogs}
-                        disabled={loading}
-                    >
+                    <button className="admin-btn admin-btn-primary" onClick={fetchLogs} disabled={loading}>
                         {loading ? "조회중..." : "조회"}
                     </button>
 
