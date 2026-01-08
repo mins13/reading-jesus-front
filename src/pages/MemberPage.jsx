@@ -4,7 +4,7 @@ import {data} from "react-router-dom";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
-fetch(`${API_BASE}/api/reading/today`, {
+fetch(`${API_BASE}/reading/today`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
@@ -39,7 +39,7 @@ export default function MemberPage() {
                 return;
             }
 
-            const res = await fetch(`${API_BASE}/api/reading/today`, {
+            const res = await fetch(`${API_BASE}/reading/today`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
