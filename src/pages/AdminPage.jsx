@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import "./AdminPage.css";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "/api";
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || "/api").replace(/\/+$/, "");
 
 function parseCellNumber(cellName) {
     const n = parseInt(String(cellName || "").replace(/[^\d]/g, ""), 10);
@@ -41,10 +41,9 @@ export default function AdminPage() {
             if (baseDate) params.set("date", baseDate);
             if (cellName) params.set("cellName", cellName);
 
-            // ✅ /api 중복 제거: API_BASE가 이미 /api 라고 가정
+            // ✅ /api 중복 방지: API_BASE가 /api 라면 여기서는 /reading/... 만 붙임
             const res = await fetch(`${API_BASE}/reading/logs?${params.toString()}`);
             if (!res.ok) throw new Error(`조회 실패 (${res.status})`);
-
             const data = await res.json();
             setResult(data);
         } catch (e) {
@@ -105,7 +104,7 @@ export default function AdminPage() {
         if (baseDate) params.set("date", baseDate);
         if (cellName) params.set("cellName", cellName);
 
-        // ✅ /api 중복 제거
+        // ✅ export도 /api 중복 없이
         const url = `${API_BASE}/reading/export?${params.toString()}`;
 
         const a = document.createElement("a");

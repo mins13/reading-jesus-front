@@ -1,12 +1,12 @@
 import { useMemo, useState } from "react";
 import "./MemberPage.css";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "/api";
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || "/api").replace(/\/+$/, "");
 
 export default function MemberPage() {
     const [name, setName] = useState("");
     const [cellName, setCellName] = useState("1셀");
-    const [pages, setPages] = useState(""); // ✅ 장수(미완독) 입력
+    const [pages, setPages] = useState(""); // ✅ 장수(미완독)
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -22,14 +22,12 @@ export default function MemberPage() {
 
         try {
             const pagesValue = pages.trim() === "" ? null : Number(pages.trim());
-
             if (pagesValue !== null && (!Number.isFinite(pagesValue) || pagesValue < 0)) {
                 setMessage("장수는 0 이상의 숫자로 입력해주세요");
                 setLoading(false);
                 return;
             }
 
-            // ✅ /api 중복 제거: API_BASE가 이미 /api 라고 가정
             const res = await fetch(`${API_BASE}/reading/today`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -42,11 +40,6 @@ export default function MemberPage() {
 
             const text = await res.text();
             setMessage(text);
-
-            // 원하면 성공 후 입력값 리셋
-            // setName("");
-            // setPages("");
-            // setCellName("1셀");
         } catch {
             setMessage("서버 연결 실패 😢");
         } finally {
