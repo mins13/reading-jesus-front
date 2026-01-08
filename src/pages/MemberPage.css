@@ -108,6 +108,10 @@
     color: #9ca3af;
     line-height: 1.4;
 }
+.btn-active {
+    filter: brightness(0.95);
+    border: 2px solid #2f6fff;
+}
 
 
 /* 조금 큰 폰에서는 카드 여백만 살짝 */
