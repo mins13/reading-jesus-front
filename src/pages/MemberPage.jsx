@@ -1,14 +1,7 @@
 import { useMemo, useState } from "react";
 import "./MemberPage.css";
-import {data} from "react-router-dom";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL;
-
-fetch(`${API_BASE}/reading/today`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-});
+const API_BASE = import.meta.env.VITE_API_BASE_URL; // .env에서 /api
 
 export default function MemberPage() {
     const [name, setName] = useState("");
@@ -28,32 +21,27 @@ export default function MemberPage() {
         setLoading(true);
 
         try {
-            // pages는 비어있으면 null로 보내기(완독이면 보통 비움)
-            const pagesValue =
-                pages.trim() === "" ? null : Number(pages.trim());
+            const pagesValue = pages.trim() === "" ? null : Number(pages.trim());
 
-            // 숫자 검증(원하면 범위도 추가 가능)
             if (pagesValue !== null && (!Number.isFinite(pagesValue) || pagesValue < 0)) {
                 setMessage("장수는 0 이상의 숫자로 입력해주세요");
                 setLoading(false);
                 return;
             }
 
+            // ✅ API_BASE가 /api 이므로 뒤에는 /reading/...만 붙인다
             const res = await fetch(`${API_BASE}/reading/today`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     name: name.trim(),
                     cellName: cellName.trim(),
-                    pages: pagesValue, // ✅ 추가
+                    pages: pagesValue,
                 }),
             });
 
             const text = await res.text();
             setMessage(text);
-
-            // 원하면 전송 성공 후 장수 칸만 비우기
-            // setPages("");
         } catch {
             setMessage("서버 연결 실패 😢");
         } finally {
@@ -81,18 +69,13 @@ export default function MemberPage() {
 
                 <div className="field">
                     <label className="label">셀 선택</label>
-                    <select
-                        className="select"
-                        value={cellName}
-                        onChange={(e) => setCellName(e.target.value)}
-                    >
+                    <select className="select" value={cellName} onChange={(e) => setCellName(e.target.value)}>
                         <option value="1셀">1셀</option>
                         <option value="2셀">2셀</option>
                         <option value="3셀">3셀</option>
                     </select>
                 </div>
 
-                {/* ✅ 장수 입력 추가 */}
                 <div className="field">
                     <label className="label">장수 입력 (미완독)</label>
                     <input
@@ -105,9 +88,7 @@ export default function MemberPage() {
                         onChange={(e) => setPages(e.target.value)}
                         inputMode="numeric"
                     />
-                    <p className="helper">
-                        * 완독이면 비워두고 “완독 ✅” 누르면 돼요
-                    </p>
+                    <p className="helper">* 완독이면 비워두고 “완독 ✅” 누르면 돼요</p>
                 </div>
 
                 <button className="btn" onClick={handleSubmit} disabled={!canSubmit}>
