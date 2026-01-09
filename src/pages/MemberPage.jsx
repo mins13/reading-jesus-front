@@ -7,7 +7,7 @@ export default function MemberPage() {
     const [name, setName] = useState("");
     const [cellName, setCellName] = useState("1셀");
 
-    // ✅ 추가: 입력 모드 (PAGES: 장수, DONE: 완독)
+    // DONE = 완독, PAGES = 장수
     const [mode, setMode] = useState("DONE");
     const [pages, setPages] = useState("");
 
@@ -19,7 +19,6 @@ export default function MemberPage() {
         if (name.trim().length === 0) return false;
         if (cellName.trim().length === 0) return false;
 
-        // 장수 모드면 숫자 필수
         if (mode === "PAGES") {
             const v = pages.trim();
             if (v === "") return false;
@@ -84,7 +83,6 @@ export default function MemberPage() {
                     </select>
                 </div>
 
-                {/* ✅ 추가: 완독/장수 선택 */}
                 <div className="field">
                     <label className="label">기록 방식</label>
                     <div style={{ display: "flex", gap: 10 }}>
@@ -107,7 +105,6 @@ export default function MemberPage() {
                     </div>
                 </div>
 
-                {/* ✅ 장수 모드일 때만 입력 보이기 */}
                 {mode === "PAGES" && (
                     <div className="field">
                         <label className="label">장수</label>

@@ -230,7 +230,7 @@ export default function AdminPage() {
                                     <td>{it.readingDate}</td>
                                     <td className="admin-cell-strong">{it.cellName}</td>
                                     <td>{it.name}</td>
-                                    <td>{it.pages ?? "-"}</td>
+                                    <td>{it.pagesText ?? "-"}</td>
                                 </tr>
                             ))}
                             {sortedItems.length === 0 && (
