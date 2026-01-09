@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import "./AdminPage.css";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL; // .env에서 /api
+const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "/api";
+
 
 function parseCellNumber(cellName) {
     const n = parseInt(String(cellName || "").replace(/[^\d]/g, ""), 10);

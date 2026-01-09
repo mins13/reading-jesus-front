@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
 import "./MemberPage.css";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL; // .env에서 /api
+const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "/api";
+
 
 export default function MemberPage() {
     const [name, setName] = useState("");
