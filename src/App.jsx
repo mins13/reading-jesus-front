@@ -11,7 +11,7 @@ export default function App() {
             {/* 셀장/회장용: 표 + CSV */}
             <Route path="/admin" element={<AdminPage />} />
 
-            {/* 없는 주소는 홈으로 */}
+            {/* 없는 주소는 으로 */}
             <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
     );

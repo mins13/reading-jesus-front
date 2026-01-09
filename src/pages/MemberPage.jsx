@@ -1,32 +1,18 @@
 import { useMemo, useState } from "react";
 import "./MemberPage.css";
 
-const API_BASE = (import.meta.env.VITE_API_BASE_URL || "/api").replace(/\/+$/, "");
+const API_BASE = import.meta.env.VITE_API_BASE_URL; // .env에서 /ap
 
 export default function MemberPage() {
     const [name, setName] = useState("");
     const [cellName, setCellName] = useState("1셀");
-
-    // DONE = 완독, PAGES = 장수
-    const [mode, setMode] = useState("DONE");
-    const [pages, setPages] = useState("");
-
+    const [pages, setPages] = useState(""); // ✅ 장수(미완독) 입력
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
 
     const canSubmit = useMemo(() => {
-        if (loading) return false;
-        if (name.trim().length === 0) return false;
-        if (cellName.trim().length === 0) return false;
-
-        if (mode === "PAGES") {
-            const v = pages.trim();
-            if (v === "") return false;
-            const n = Number(v);
-            if (!Number.isFinite(n) || n < 0) return false;
-        }
-        return true;
-    }, [name, cellName, mode, pages, loading]);
+        return name.trim().length > 0 && cellName.trim().length > 0 && !loading;
+    }, [name, cellName, loading]);
 
     const handleSubmit = async () => {
         if (!canSubmit) return;
@@ -35,21 +21,27 @@ export default function MemberPage() {
         setLoading(true);
 
         try {
-            const payload =
-                mode === "DONE"
-                    ? { name: name.trim(), cellName: cellName.trim(), status: "COMPLETED" }
-                    : { name: name.trim(), cellName: cellName.trim(), status: "PAGES", pages: Number(pages.trim()) };
+            const pagesValue = pages.trim() === "" ? null : Number(pages.trim());
 
+            if (pagesValue !== null && (!Number.isFinite(pagesValue) || pagesValue < 0)) {
+                setMessage("장수는 0 이상의 숫자로 입력해주세요");
+                setLoading(false);
+                return;
+            }
+
+            // ✅ API_BASE가 /api 이므로 뒤에는 /reading/...만 붙인다
             const res = await fetch(`${API_BASE}/reading/today`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
+                body: JSON.stringify({
+                    name: name.trim(),
+                    cellName: cellName.trim(),
+                    pages: pagesValue,
+                }),
             });
 
             const text = await res.text();
             setMessage(text);
-            setPages("");
-            setMode("DONE");
         } catch {
             setMessage("서버 연결 실패 😢");
         } finally {
@@ -61,7 +53,7 @@ export default function MemberPage() {
         <div className="member-page">
             <div className="member-card">
                 <h1 className="member-title">📖 예수로교회 대청 리딩지저스 완독 체크 📖</h1>
-                <p className="member-sub">이름 입력 + 셀 선택 후 완료 버튼!</p>
+                <p className="member-sub">이름 입력 + 셀 선택 후 완독 버튼!</p>
 
                 <div className="field">
                     <label className="label">이름</label>
@@ -71,6 +63,7 @@ export default function MemberPage() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         autoComplete="name"
+                        inputMode="text"
                     />
                 </div>
 
@@ -84,45 +77,22 @@ export default function MemberPage() {
                 </div>
 
                 <div className="field">
-                    <label className="label">기록 방식</label>
-                    <div style={{ display: "flex", gap: 10 }}>
-                        <button
-                            type="button"
-                            className={`btn ${mode === "DONE" ? "btn-active" : ""}`}
-                            onClick={() => setMode("DONE")}
-                            disabled={loading}
-                        >
-                            완독
-                        </button>
-                        <button
-                            type="button"
-                            className={`btn ${mode === "PAGES" ? "btn-active" : ""}`}
-                            onClick={() => setMode("PAGES")}
-                            disabled={loading}
-                        >
-                            장수 입력
-                        </button>
-                    </div>
+                    <label className="label">장수 입력 (미완독)</label>
+                    <input
+                        className="input"
+                        type="number"
+                        min="0"
+                        step="1"
+                        placeholder="예) 3 (미완독이면 입력)"
+                        value={pages}
+                        onChange={(e) => setPages(e.target.value)}
+                        inputMode="numeric"
+                    />
+                    <p className="helper">* 완독이면 비워두고 “완독 ✅” 누르면 돼요</p>
                 </div>
 
-                {mode === "PAGES" && (
-                    <div className="field">
-                        <label className="label">장수</label>
-                        <input
-                            className="input"
-                            type="number"
-                            min="0"
-                            step="1"
-                            placeholder="예) 3"
-                            value={pages}
-                            onChange={(e) => setPages(e.target.value)}
-                            inputMode="numeric"
-                        />
-                    </div>
-                )}
-
                 <button className="btn" onClick={handleSubmit} disabled={!canSubmit}>
-                    {loading ? "처리 중..." : "완료 ✅"}
+                    {loading ? "처리 중..." : "완독 ✅"}
                 </button>
 
                 {message && <div className="msg">{message}</div>}
