@@ -1,16 +1,83 @@
-# React + Vite
+# 📖 리딩지저스 체크
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+성경 읽기 기록을 간편하게 남기고, 관리자가 기간·그룹별로 조회할 수 있는 웹앱입니다.
 
-Currently, two official plugins are available:
+- **개발 기간:** 2026.01.02 ~ 2026.01.10
+- **개발 형태:** 개인 프로젝트
+- **담당 역할:** 기획 · 설계 · 프론트엔드 · 백엔드 · 배포
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 💡 개발 배경
 
-## React Compiler
+참여자가 단체 채팅방에 완독 여부를 남기면 담당자가 매일 확인하고, 주말마다 보고서로 취합하는 방식의 번거로움을 줄이고자 개발했습니다.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+참여자는 웹에서 직접 읽기 기록을 남기고, 관리자는 기록 조회와 CSV 다운로드를 통해 보고에 필요한 데이터를 확인할 수 있도록 구성했습니다.
 
-## Expanding the ESLint configuration
+## ✨ 주요 기능
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 참여자
+- 이름과 소속 그룹을 입력해 당일 읽기 기록 등록
+- 완독 여부 또는 읽은 장수 기록
+
+### 관리자
+- 기간·그룹별 읽기 기록 조회
+- 기록 CSV 다운로드
+- 완독 기록과 장수 입력 기록을 구분해 표시
+
+### 데이터 처리
+- 날짜와 이름의 조합에 DB 고유 제약을 적용해 당일 중복 기록 방지
+- 한국 시간대(Asia/Seoul)를 기준으로 기록 날짜 처리
+- 완독 기록은 `pages: null`로 저장하고 화면과 CSV에 ‘완독’으로 표시
+
+## 🛠️ 기술 스택
+
+| 구분 | 기술 |
+|------|------|
+| Language | Java, JavaScript |
+| Frontend | React, Vite |
+| Backend | Spring Boot, Spring Data JPA |
+| Database | MySQL |
+| Infrastructure | Oracle Cloud, Nginx |
+
+## 🔌 주요 API
+
+| Method | Endpoint | 설명 |
+|--------|----------|------|
+| POST | `/api/reading/today` | 당일 읽기 기록 등록 |
+| GET | `/api/reading/logs` | 기간·그룹별 기록 조회 |
+| GET | `/api/reading/export` | 기록 CSV 다운로드 |
+
+## 🔍 트러블슈팅
+
+### 배포 환경의 API 요청 경로 오류
+
+**문제**
+
+API 기본 주소와 개별 요청 경로에 `/api`가 중복되어
+`/api/api/reading/today`와 같은 잘못된 URL이 생성됐습니다.
+
+또한 API 기본 주소가 `undefined`로 구성된 요청에서는
+`/undefined/reading/today`로 POST 요청이 전달되어 405 오류가 발생했습니다.
+
+**원인 분석 및 수정 방향**
+
+- Vite 환경변수와 실제 API 호출 코드를 비교해 URL 구성 과정 확인
+- Nginx의 `/api/` 프록시 설정과 백엔드 API 경로 대조
+- 기본 주소를 `/api`로 사용할 때 개별 요청 경로는 `/reading/...`로 구성하도록 정리
+- 환경변수 변경 사항을 반영하기 위한 프론트엔드 재빌드·배포 절차 정리
+
+**배운 점**
+
+배포 오류를 분석할 때는 프론트엔드 코드뿐 아니라 빌드 환경변수,
+Nginx 프록시, 백엔드 경로까지 요청 흐름 전체를 확인해야 한다는 점을 배웠습니다.
+
+## 🌱 프로젝트를 통해 배운 점
+
+- 반복되는 확인·취합 업무를 웹 서비스 기능으로 전환하는 경험
+- DB 고유 제약을 활용한 중복 데이터 방지
+- 실제 사용 환경에 맞춘 시간대 처리
+- 프론트엔드부터 서버까지 연결해 배포 오류를 분석하는 경험
+
+## 📷 서비스 화면:
+
+<img width="940" height="716" alt="KakaoTalk_20261022_160053090_01" src="https://github.com/user-attachments/assets/54fe4db8-f670-4c0b-b994-383067a8ffb4" />
+<img width="784" height="1146" alt="KakaoTalk_20261022_160053090" src="https://github.com/user-attachments/assets/17cff3d3-2264-4fd1-83b2-f3453438855f" />
